@@ -1,0 +1,94 @@
+/*
+100    Extra Light or Ultra Light
+200    Light or Thin
+300    Book or Demi
+400    Normal or Regular
+500    Medium
+600    Semibold, Demibold
+700    Bold
+800    Black, Extra Bold or Heavy
+900    Extra Black, Fat, Poster or Ultra Black
+*/
+
+@font-face {
+  font-family: 'Tiempos';
+  font-weight: 400;
+  font-style: normal;
+  src: url('TiemposText-Regular.eot?#iefix') format('embedded-opentype'), 
+  url('TiemposText-Regular.woff') format('woff'), 
+  url('TiemposText-Regular.ttf')  format('truetype'),
+  url('TiemposText-Regular.svg#TiemposText-Regular') format('svg');
+}
+@font-face {
+  font-family: 'Tiempos';
+  font-weight: 500;
+  font-style: normal;
+  src: url('TiemposText-Medium.eot?#iefix') format('embedded-opentype'), 
+  url('TiemposText-Medium.woff') format('woff'), 
+  url('TiemposText-Medium.ttf')  format('truetype'),
+  url('TiemposText-Medium.svg#TiemposText-Medium') format('svg');
+}
+@font-face {
+  font-family: 'Tiempos';
+  font-weight: 600;
+  font-style: normal;
+  src: url('TiemposText-Semibold.eot?#iefix') format('embedded-opentype'), 
+  url('TiemposText-Semibold.woff') format('woff'), 
+  url('TiemposText-Semibold.ttf')  format('truetype'),
+  url('TiemposText-Semibold.svg#TiemposText-Semibold') format('svg');
+}
+@font-face {
+  font-family: 'Tiempos';
+  font-weight: 700;
+  font-style: normal;
+  src: url('TiemposText-Bold.eot?#iefix') format('embedded-opentype'), 
+  url('TiemposText-Bold.woff') format('woff'), 
+  url('TiemposText-Bold.ttf')  format('truetype'),
+  url('TiemposText-Bold.svg#TiemposText-Bold') format('svg');
+}
+
+@font-face {
+  font-family: 'Tiempos';
+  font-weight: 400;
+  font-style: italic;
+  src: url('TiemposText-RegularItalic.eot?#iefix') format('embedded-opentype'), 
+  url('TiemposText-RegularItalic.woff') format('woff'), 
+  url('TiemposText-RegularItalic.ttf')  format('truetype'),
+  url('TiemposText-RegularItalic.svg#TiemposText-Regular') format('svg');
+}
+@font-face {
+  font-family: 'Tiempos';
+  font-weight: 500;
+  font-style: italic;
+  src: url('TiemposText-MediumItalic.eot?#iefix') format('embedded-opentype'), 
+  url('TiemposText-MediumItalic.woff') format('woff'), 
+  url('TiemposText-MediumItalic.ttf')  format('truetype'),
+  url('TiemposText-MediumItalic.svg#TiemposText-Medium') format('svg');
+}
+@font-face {
+  font-family: 'Tiempos';
+  font-weight: 600;
+  font-style: italic;
+  src: url('TiemposText-SemiboldItalic.eot?#iefix') format('embedded-opentype'), 
+  url('TiemposText-SemiboldItalic.woff') format('woff'), 
+  url('TiemposText-SemiboldItalic.ttf')  format('truetype'),
+  url('TiemposText-SemiboldItalic.svg#TiemposText-Semibold') format('svg');
+}
+@font-face {
+  font-family: 'Tiempos';
+  font-weight: 700;
+  font-style: italic;
+  src: url('TiemposText-BoldItalic.eot?#iefix') format('embedded-opentype'), 
+  url('TiemposText-BoldItalic.woff') format('woff'), 
+  url('TiemposText-BoldItalic.ttf')  format('truetype'),
+  url('TiemposText-BoldItalic.svg#TiemposText-Bold') format('svg');
+}
+
+body {
+  font-family: 'Tiempos';
+}
+
+
+body.markdown-body {
+  font-family: 'Tiempos';
+}
