@@ -26,27 +26,29 @@
     $name_pattern = '/^(.+)(\.' .  implode($md_file_endings, '$|\.') . '$)/';
     foreach ($iterator as $info) {
       if (preg_match($path_pattern, $info->getPathname(), $matches)) {
-        preg_match($name_pattern, $info->getFilename(), $clear_name);
-        $markdown_file_infos[$clear_name[1]] = $info;
+        preg_match($name_pattern, $info->getFilename(), $markdown_name);
+        $markdown_file_infos[$markdown_name[1]] = $info;
       }
     }
     return $markdown_file_infos;
     
   }  
+
+  $markdown_base_directory = 'Quellen';
   
-  $markdown_base_directory = 'Literatur';
+  $markdown_query = isset($_GET['l']) ? $_GET['l'] : $_GET['q'];
   
-  if (isset($_GET['l'])) {
+  if (isset($markdown_query)) {
     
+    $markdown_name = urldecode($markdown_query);
     $markdown_file_infos = findMarkdownFiles($markdown_base_directory);
-    $clear_name = urldecode($_GET['l']);
     
-    if (isset($markdown_file_infos[$clear_name])) {
+    if (isset($markdown_file_infos[$markdown_name])) {
       
       // Load and convert Markdown
       
-      $markdown_file_name = $markdown_file_infos[$clear_name]->getFilename();
-      $markdown_file_path = $markdown_file_infos[$clear_name]->getPathname();
+      $markdown_file_name = $markdown_file_infos[$markdown_name]->getFilename();
+      $markdown_file_path = $markdown_file_infos[$markdown_name]->getPathname();
       
       $markdown = file_get_contents($markdown_file_path);
       $markdown_html = Markdown::defaultTransform($markdown);
@@ -58,7 +60,7 @@
       $markdown_file_directory = preg_replace('/\/$/', '', $markdown_file_directory);
             
       $markdown_base = str_replace($markdown_base_directory . '/', '', $markdown_file_directory);
-      $html_base = $_SERVER['SCRIPT_URI'] . 'Literatur/' . rawurlencode($markdown_base) . '/';
+      $html_base = $_SERVER['SCRIPT_URI'] . $markdown_base_directory . '/' . rawurlencode($markdown_base) . '/';
       
       // Clean up Markdown output
       
