@@ -1,2 +1,2 @@
 # Markdown-Publisher
-This PHP script searches a Literatur-subdirectory with Markdown files and renders the match as a webpage. 
+This PHP script searches a source subdirectory containing raw Markdown files and renders a match as a printable webpage. 
