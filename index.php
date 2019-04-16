@@ -35,12 +35,12 @@
   }  
 
   $markdown_base_directory = 'Quellen';
-  
   $markdown_query = isset($_GET['l']) ? $_GET['l'] : $_GET['q'];
   
   if (isset($markdown_query)) {
     
     $markdown_name = urldecode($markdown_query);
+    
     $markdown_file_infos = findMarkdownFiles($markdown_base_directory);
     
     if (isset($markdown_file_infos[$markdown_name])) {
@@ -60,7 +60,6 @@
       $markdown_file_directory = preg_replace('/\/$/', '', $markdown_file_directory);
             
       $markdown_base = str_replace($markdown_base_directory . '/', '', $markdown_file_directory);
-      $html_base = $_SERVER['SCRIPT_URI'] . $markdown_base_directory . '/' . rawurlencode($markdown_base) . '/';
       
       // Clean up Markdown output
       
@@ -80,12 +79,20 @@
       $body = $dom->getElementsByTagName('body')->item(0);
       $body->setAttribute('class','markdown-body');
       
-      // print_r($markdown_body->item(0));
+      // Test if script is running under URL rewrite
       
+      if (preg_match('/(.*\/)([^\/]*$)/i', $_SERVER['SCRIPT_URI'], $request_matches) && isset($request_matches[2]) && urldecode($request_matches[2]) === $markdown_name) {
+        $script_base = $request_matches[1];
+      } else {
+        $script_base = $_SERVER['SCRIPT_URI'];
+      }
+
+      $html_base = $script_base . $markdown_base_directory . '/' . rawurlencode($markdown_base) . '/';
+  
       // Compile new Head
       
       $head = $dom->createElement('head');
-      
+
       // Compile Head
 
       $head_viewport = $dom->createElement('meta');
@@ -96,19 +103,19 @@
       $head_link = $dom->createElement('link');
       $head_link->setAttribute('rel', 'stylesheet');
       $head_link->setAttribute('media', 'all');
-      $head_link->setAttribute('href', $_SERVER['SCRIPT_URI'] . 'css/github.css');
+      $head_link->setAttribute('href', $script_base . 'css/github.css');
       $head->appendChild($head_link);
       
       $head_link = $dom->createElement('link');
       $head_link->setAttribute('rel', 'stylesheet');
       $head_link->setAttribute('media', 'all');
-      $head_link->setAttribute('href', $_SERVER['SCRIPT_URI'] . 'css/tiempos/tiempos.css');
+      $head_link->setAttribute('href', $script_base . 'css/tiempos/tiempos.css');
       $head->appendChild($head_link);
       
       $head_link = $dom->createElement('link');
       $head_link->setAttribute('rel', 'stylesheet');
       $head_link->setAttribute('media', 'print');
-      $head_link->setAttribute('href', $_SERVER['SCRIPT_URI'] . 'css/print.css');
+      $head_link->setAttribute('href', $script_base . 'css/print.css');
       $head->appendChild($head_link);
                   
       $head_base = $dom->createElement('base');
@@ -132,15 +139,15 @@
       $head->appendChild($head_title);
       
       $body = $dom->createElement('body');
-      $html_body = $dom->createElement('div', "File '{$_GET['l']}' not found.");
+      $html_body = $dom->createElement('p', "File '{$_GET['l']}' not found.");
       $body->appendChild($html_body);
       
       $dom->appendChild($head);
       $dom->appendChild($body);
+      
       print($dom->saveHTML());
       
     }
-    
     
   } else {
     
