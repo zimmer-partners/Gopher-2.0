@@ -2,7 +2,20 @@
   
   require '../vendor/autoload.php';
   use Michelf\Markdown;
-       
+  
+  function stripforwardslashes($string) {
+    
+    if (preg_match('/^\/(.+)/i', $_SERVER['SCRIPT_URI'], $matches) && isset($matches[1])) {
+      $string = $matches[1];
+    }
+    if (preg_match('/(.+)\/$/i', $_SERVER['SCRIPT_URI'], $matches) && isset($matches[1])) {
+      $string = $matches[1];
+    }
+    
+    return $string;
+    
+  }
+  
   function findMarkdownFiles($path) {
     
     $md_file_endings = [
@@ -81,7 +94,10 @@
       
       // Test if script is running under URL rewrite
       
-      if (preg_match('/(.*\/)([^\/]*$)/i', $_SERVER['SCRIPT_URI'], $request_matches) && isset($request_matches[2]) && urldecode($request_matches[2]) === $markdown_name) {
+      $script_uri = $_SERVER['SCRIPT_URI'];
+      $script_uri = stripforwardslashes($script_uri);
+      
+      if (preg_match('/(.*\/)([^\/]*$)/i', $script_uri, $request_matches) && isset($request_matches[2]) && urldecode($request_matches[2]) === $markdown_name) {
         $script_base = $request_matches[1];
       } else {
         $script_base = $_SERVER['SCRIPT_URI'];
