@@ -43,6 +43,8 @@
         $markdown_file_infos[$markdown_name[1]] = $info;
       }
     }
+    array_multisort($markdown_file_infos, SORT_ASC, SORT_NATURAL);
+    
     return $markdown_file_infos;
     
   }  
