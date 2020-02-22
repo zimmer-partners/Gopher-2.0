@@ -19,3 +19,7 @@ If you decide to use Markdown Publisher anyhow, Moritz Zimmer does not account f
 Feel free to change any part of Markdown Publisher, especially replacing the font specified in its css so you don't get any issues. 
 
 If you decide to use Markdown Publisher, it would be kind of nice to mention Moritz Zimmer – at least in Markdown Publisher's source code or any work derived from it.
+
+## Version history
+
+- 1.0: First release version
