@@ -48,7 +48,10 @@
     return $markdown_file_infos;
     
   }  
-
+  
+  $script_filename = $_SERVER{'SCRIPT_FILENAME'};
+  $script_filepath = preg_replace('/\/[^\.|^\/]*\.php$/i', '', $script_filename);
+    
   $markdown_base_directory = 'Quellen';
   $markdown_query = isset($_GET['l']) ? $_GET['l'] : $_GET['q'];
   
@@ -132,6 +135,13 @@
     $head_link->setAttribute('media', 'print');
     $head_link->setAttribute('href', $script_base . 'css/print.css');
     $head->appendChild($head_link);
+        
+    if (file_exists($script_filepath . '/css/custom.css')){
+      $head_link->setAttribute('rel', 'stylesheet');
+      $head_link->setAttribute('media', 'all');
+      $head_link->setAttribute('href', $script_base . 'css/custom.css');
+      $head->appendChild($head_link);      
+    }
                 
     $head_base = $dom->createElement('base');
     $head_base->setAttribute('href', $html_base);
