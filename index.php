@@ -1,7 +1,7 @@
 <?php
   
   require '../vendor/autoload.php';
-  use Michelf\Markdown;
+  use Michelf\MarkdownExtra;
   
   function stripforwardslashes($string) {
     
@@ -66,7 +66,7 @@
     $markdown_file_path = $markdown_file_infos[$markdown_name]->getPathname();
     
     $markdown = file_get_contents($markdown_file_path);
-    $markdown_html = Markdown::defaultTransform($markdown);
+    $markdown_html = MarkdownExtra::defaultTransform($markdown);
           
     // Parse HTML base
     
@@ -188,7 +188,14 @@
     $head_link->setAttribute('media', 'print');
     $head_link->setAttribute('href', $script_base . 'css/print.css');
     $head->appendChild($head_link);
-                
+            
+    if (file_exists($script_filepath . '/css/custom.css')){
+      $head_link->setAttribute('rel', 'stylesheet');
+      $head_link->setAttribute('media', 'all');
+      $head_link->setAttribute('href', $script_base . 'css/custom.css');
+      $head->appendChild($head_link);      
+    }
+    
     $head_base = $dom->createElement('base');
     $head_base->setAttribute('href', $html_base);
     $head->appendChild($head_base);
