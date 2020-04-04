@@ -1,4 +1,4 @@
+
 [submodule "Quellen"]
 	path = Quellen
 	url = git@github.com:moritzz/Quellen.git
-	branch = master
