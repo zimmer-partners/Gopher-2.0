@@ -1,4 +1,4 @@
 
 [submodule "Quellen"]
 	path = Quellen
-	url = https://github.com/moritzz/Drafts
+	url = git@github.com:moritzz/Quellen.git

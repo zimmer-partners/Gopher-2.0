@@ -209,6 +209,18 @@
     $h1 = $dom->createElement('h1','Available Markdown Files');
     $body->appendChild($h1);
     
+    // Compile fotter snippet and add them to the end of Body
+    
+    $footer_html = file_get_contents('snippets/foooter.html');
+    if ($footer_html) {
+      $footer_tidy = tidy_parse_string($footer_html, $tidy_config, 'UTF8'); 
+      $footer_tidy->cleanRepair();
+      $footer_dom = new DOMDocument('1.0', 'utf-8');
+      $footer_dom->loadHtml('<?xml encoding="utf-8" ?>' . $footer_tidy);
+      $body->appendChild($footer_dom);
+    }
+    
+    
     // Compile Markdown file list
     
     $list = $dom->createElement('ul');
