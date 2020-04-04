@@ -57,7 +57,17 @@
   
   $markdown_file_infos = findMarkdownFiles($markdown_base_directory);
   $markdown_name = rawurldecode($markdown_query);
-    
+  
+  // Compile footer snippet and add them to the end of Body
+  
+  $footer_snippet_html = file_get_contents('snippets/foooter.html');
+  if ($footer_snippet_html) {
+    $footer_snippet_tidy = tidy_parse_string($footer_snippet_html, $tidy_config, 'UTF8'); 
+    $footer_snippet_tidy->cleanRepair();
+    $footer_snippet_dom = new DOMDocument('1.0', 'utf-8');
+    $footer_snippet_dom->loadHtml('<?xml encoding="utf-8" ?>' . $footer_snippet_tidy);
+  }
+  
   if (isset($markdown_query) && isset($markdown_file_infos[$markdown_name])) {
     
     // Load and convert Markdown
@@ -94,6 +104,12 @@
     $body = $dom->getElementsByTagName('body')->item(0);
     $body->setAttribute('class','markdown-body');
     
+    // Add footer snippet to the end of Body
+    
+    if (isset($footer_snippet_dom)) {
+      $body->appendChild($footer_dom);
+    }
+    
     // Test if script is running under URL rewrite
     
     $script_uri = $_SERVER['SCRIPT_URI'];
@@ -104,7 +120,9 @@
     } else {
       $script_base = $_SERVER['SCRIPT_URI'];
     }
-
+    
+    // Set Base Url in Head to Markdown base directory
+    
     $html_base = $script_base . $markdown_base_directory . '/' . rawurlencode($markdown_base) . '/';
 
     // Compile new Head
@@ -208,19 +226,7 @@
     
     $h1 = $dom->createElement('h1','Available Markdown Files');
     $body->appendChild($h1);
-    
-    // Compile fotter snippet and add them to the end of Body
-    
-    $footer_html = file_get_contents('snippets/foooter.html');
-    if ($footer_html) {
-      $footer_tidy = tidy_parse_string($footer_html, $tidy_config, 'UTF8'); 
-      $footer_tidy->cleanRepair();
-      $footer_dom = new DOMDocument('1.0', 'utf-8');
-      $footer_dom->loadHtml('<?xml encoding="utf-8" ?>' . $footer_tidy);
-      $body->appendChild($footer_dom);
-    }
-    
-    
+
     // Compile Markdown file list
     
     $list = $dom->createElement('ul');
@@ -235,6 +241,12 @@
       $body->appendChild($html_link[$file_key]['element']);
     }
     
+    // Add footer snippet to the end of Body
+    
+    if (isset($footer_snippet_dom)) {
+      $body->appendChild($footer_dom);
+    }
+
     $dom->appendChild($head);
     $dom->appendChild($body);
     
