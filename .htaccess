@@ -4,4 +4,8 @@ RewriteBase /
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d
 RewriteCond %{REQUEST_URI} ^(?:.*)?/([^/]+)/?  [NC]
-RewriteRule .*      /?q=%1                     [L]
+RewriteRule .*      /Assaloni/?q=%1                     [L]
+AuthType Basic
+AuthUserFile /home/moritzzc/public_html/moritzz.com/Assaloni/.htpasswd
+AuthName "Dr. Assaloni"
+Require valid-user
