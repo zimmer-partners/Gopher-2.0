@@ -58,14 +58,23 @@
   $markdown_file_infos = findMarkdownFiles($markdown_base_directory);
   $markdown_name = rawurldecode($markdown_query);
   
-  // Compile footer snippet and add them to the end of Body
+  // Compile Custom markup from file
   
-  $footer_snippet_html = file_get_contents('snippets/foooter.html');
-  if ($footer_snippet_html) {
-    $footer_snippet_tidy = tidy_parse_string($footer_snippet_html, $tidy_config, 'UTF8'); 
-    $footer_snippet_tidy->cleanRepair();
-    $footer_snippet_dom = new DOMDocument('1.0', 'utf-8');
-    $footer_snippet_dom->loadHtml('<?xml encoding="utf-8" ?>' . $footer_snippet_tidy);
+  $custom_snippet_html = file_get_contents('./templates/full.html');
+  if ($custom_snippet_html) {
+    // Clean up Markdown output
+    $custom_snippet_tidy_config = array( 
+      'clean' => true, 
+      'output-xml' => true, 
+      'force-output' => true,
+      'input-encoding' => 'utf8',
+      'output-encoding' => 'utf8',
+      'show-body-only' => true,
+    ); 
+    $custom_snippet_tidy = tidy_parse_string($custom_snippet_html, $custom_snippet_tidy_config, 'UTF8'); 
+    $custom_snippet_tidy->cleanRepair();
+    $custom_snippet_dom = new DOMDocument('1.0', 'utf-8');
+    $custom_snippet_dom->loadHtml('<?xml encoding="utf-8" ?>' . $custom_snippet_tidy);
   }
   
   if (isset($markdown_query) && isset($markdown_file_infos[$markdown_name])) {
@@ -103,12 +112,6 @@
     $dom->loadHtml('<?xml encoding="utf-8" ?>' . $markdown_tidy);
     $body = $dom->getElementsByTagName('body')->item(0);
     $body->setAttribute('class','markdown-body');
-    
-    // Add footer snippet to the end of Body
-    
-    if (isset($footer_snippet_dom)) {
-      $body->appendChild($footer_dom);
-    }
     
     // Test if script is running under URL rewrite
     
@@ -166,12 +169,31 @@
     $head->appendChild($head_base);
           
     $h1s = $body->getElementsByTagName('h1');
-    $head_title = $dom->createElement('title', $h1s->item(0)->nodeValue);
+    if ($h1s->length > 0) {
+      $head_title = $dom->createElement('title', $h1s->item(0)->nodeValue);
+    } else {
+      $head_title = $dom->createElement('title', $markdown_name);
+    }
     $head->appendChild($head_title);
+    
+    // Append Custom head and body markup
+    
+    if (isset($custom_snippet_dom)) {
+      $custom_snippet_head = $custom_snippet_dom->getElementsByTagName('head')->item(0);
+      $custom_snippet_body = $custom_snippet_dom->getElementsByTagName('body')->item(0);
+      foreach ($custom_snippet_head->childNodes as $childNode) {
+        $importChild = $dom->importNode($childNode, true);
+        $head->appendChild($importChild);
+      }
+      foreach ($custom_snippet_body->childNodes as $childNode) {
+        $importChild = $dom->importNode($childNode, true);
+        $body->appendChild($importChild);
+      }
+    }
     
     $old_head = $dom->getElementsByTagName('head')->item(0);
     $old_head->parentNode->replaceChild($head, $old_head);
-
+    
     print($dom->saveHTML());
       
   } else {
@@ -241,12 +263,21 @@
       $body->appendChild($html_link[$file_key]['element']);
     }
     
-    // Add footer snippet to the end of Body
+    // Append Custom head and body markup
     
-    if (isset($footer_snippet_dom)) {
-      $body->appendChild($footer_dom);
+    if (isset($custom_snippet_dom)) {
+      $custom_snippet_head = $custom_snippet_dom->getElementsByTagName('head')->item(0);
+      $custom_snippet_body = $custom_snippet_dom->getElementsByTagName('body')->item(0);
+      foreach ($custom_snippet_head->childNodes as $childNode) {
+        $importChild = $dom->importNode($childNode, true);
+        $head->appendChild($importChild);
+      }
+      foreach ($custom_snippet_body->childNodes as $childNode) {
+        $importChild = $dom->importNode($childNode, true);
+        $body->appendChild($importChild);
+      }
     }
-
+    
     $dom->appendChild($head);
     $dom->appendChild($body);
     
