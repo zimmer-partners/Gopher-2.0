@@ -5,7 +5,9 @@ RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d
 RewriteCond %{REQUEST_URI} ^(?:.*)?/([^/]+)/?  [NC]
 RewriteRule .*      /Assaloni/?q=%1                     [L]
+
+AuthName "Dokumente zur Psychotherapie"
 AuthType Basic
 AuthUserFile /home/moritzzc/public_html/moritzz.com/Assaloni/.htpasswd
-AuthName "Dr. Assaloni"
+AuthGroupFile /dev/null
 Require valid-user
