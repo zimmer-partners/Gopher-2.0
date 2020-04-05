@@ -1,8 +1,9 @@
 
-[submodule "Quellen"]
-	path = Quellen
-	url = git@github.com:moritzz/Quellen.git
 [submodule "mpd-template"]
 	path = templates
 	url = git@github.com:moritzz/MDP-Template.git
+	branch = master
+[submodule "Quellen"]
+	path = Quellen
+	url = git@github.com:moritzz/Therapie.git
 	branch = master
