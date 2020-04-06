@@ -109,6 +109,10 @@
   } else {
     $script_base = $_SERVER['SCRIPT_URI'];
   }
+      
+  // Set Base Url in Head to URI
+    
+  $html_base = $_SERVER['REQUEST_URI'];
 
   if (isset($markdown_query) && isset($markdown_file_infos[$markdown_name])) {
     
@@ -145,10 +149,6 @@
     $dom->loadHtml('<?xml encoding="utf-8" ?>' . $markdown_tidy);
     $body = $dom->getElementsByTagName('body')->item(0);
     $body->setAttribute('class','markdown-body');
-    
-    // Set Base Url in Head to Markdown base directory
-    
-    $html_base = $script_base . $markdown_base_directory . '/' . rawurlencode($markdown_base) . '/';
 
     // Compile new Head
     

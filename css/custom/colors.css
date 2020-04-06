@@ -1,6 +1,9 @@
-span.newest {
-  background-color: lightpink;
+.newest {
+  background-color: #FFBCAE;
 }
-span.newer {
-  background-color: lightgoldenrodyellow;
+.newer {
+  background-color: #FFDEB3;
+}
+.new {
+  background-color: #FFFFB3;
 }

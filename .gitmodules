@@ -5,5 +5,5 @@
 	branch = master
 [submodule "Quellen"]
 	path = Quellen
-	url = git@github.com:moritzz/Therapie.git
+	url = git@github.com:moritzz/Quellen.git
 	branch = master
