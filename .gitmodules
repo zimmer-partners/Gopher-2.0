@@ -1,5 +1,0 @@
-
-[submodule "mpd-template"]
-	path = templates
-	url = git@github.com:moritzz/MDP-Template.git
-	branch = master
