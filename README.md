@@ -8,11 +8,18 @@ This PHP script searches a source subdirectory containing raw Markdown files and
 - Replace the 'Quellen' directory with a directory or a directory tree holding your markdown files and images.
 - Point your browser to your web server.
 
-### Styiling and Templating
+### Styling and Templating
 
 Markdown Publisher comes with a set of CSS files, that can be changed. You can even add new CSS files to the CSS directory and they will get included to all Markdown based webpages automatically.
 
 To add custom HTML markup to your Markdown based webpages, you can add any custom valid HTML tags to the file `full.html`. Any valid tags in its `head` or `body` HTML tags is added to the *end* of the correspodning section of all Markdown based webpages. (Good to include tracking for Matamo, Google analytics et al.)
+
+### Running from a subdirectory on your server
+
+Markdown Publisher comes with a pre-configured `.htacsess` file for clean-URLs. If you run its script from a subdirectory of you server, please add its name to the following line:
+
+Change... `RewriteRule .*      /?q=%1                     [L]`
+... to: `RewriteRule .*      /mydirectory/?q=%1                     [L]`
 
 ## Why ist this not open source?
 
