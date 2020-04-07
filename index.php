@@ -47,7 +47,29 @@
     
     return $markdown_file_infos;
     
-  }  
+  }
+  
+  function addCSStoHead($dom, $head) {
+    try {
+      $css_directory = new \RecursiveDirectoryIterator(__DIR__ . '/css/');
+    } catch (Exception $error) {
+      return false;
+    }
+    if (isset($css_directory)) {
+      $css_iterator = new \RecursiveIteratorIterator($css_directory);
+      foreach ($css_iterator as $css_info) {
+        if (preg_match('/^[^\.]+(\.css$)/', $css_info->getFilename())){
+          $css_path = $css_info->getPathname();
+          $css_path = str_ireplace(__DIR__ . '/', '', $css_path);
+          $head_link = $dom->createElement('link');
+          $head_link->setAttribute('rel', 'stylesheet');
+          $head_link->setAttribute('media', 'all');
+          $head_link->setAttribute('href', $css_path);
+          $head->appendChild($head_link);      
+        }
+      }
+    }
+  }
   
   $script_filename = $_SERVER{'SCRIPT_FILENAME'};
   $script_filepath = preg_replace('/\/[^\.|^\/]*\.php$/i', '', $script_filename);
@@ -77,6 +99,21 @@
     $custom_snippet_dom->loadHtml('<?xml encoding="utf-8" ?>' . $custom_snippet_tidy);
   }
   
+  // Test if script is running under URL rewrite
+  
+  $script_uri = $_SERVER['SCRIPT_URI'];
+  $script_uri = stripforwardslashes($script_uri);
+  
+  if (preg_match('/(.*\/)([^\/]*$)/i', $script_uri, $request_matches) && isset($request_matches[2]) && urldecode($request_matches[2]) === $markdown_name) {
+    $script_base = $request_matches[1];
+  } else {
+    $script_base = $_SERVER['SCRIPT_URI'];
+  }
+      
+  // Set Base Url in Head to URI
+    
+  $html_base = $_SERVER['REQUEST_URI'];
+
   if (isset($markdown_query) && isset($markdown_file_infos[$markdown_name])) {
     
     // Load and convert Markdown
@@ -112,21 +149,6 @@
     $dom->loadHtml('<?xml encoding="utf-8" ?>' . $markdown_tidy);
     $body = $dom->getElementsByTagName('body')->item(0);
     $body->setAttribute('class','markdown-body');
-    
-    // Test if script is running under URL rewrite
-    
-    $script_uri = $_SERVER['SCRIPT_URI'];
-    $script_uri = stripforwardslashes($script_uri);
-    
-    if (preg_match('/(.*\/)([^\/]*$)/i', $script_uri, $request_matches) && isset($request_matches[2]) && urldecode($request_matches[2]) === $markdown_name) {
-      $script_base = $request_matches[1];
-    } else {
-      $script_base = $_SERVER['SCRIPT_URI'];
-    }
-    
-    // Set Base Url in Head to Markdown base directory
-    
-    $html_base = $script_base . $markdown_base_directory . '/' . rawurlencode($markdown_base) . '/';
 
     // Compile new Head
     
@@ -139,31 +161,8 @@
     $head_viewport->setAttribute('content', 'initial-scale=1, viewport-fit=cover');
     $head->appendChild($head_viewport);
     
-    $head_link = $dom->createElement('link');
-    $head_link->setAttribute('rel', 'stylesheet');
-    $head_link->setAttribute('media', 'all');
-    $head_link->setAttribute('href', $script_base . 'css/github.css');
-    $head->appendChild($head_link);
-    
-    $head_link = $dom->createElement('link');
-    $head_link->setAttribute('rel', 'stylesheet');
-    $head_link->setAttribute('media', 'all');
-    $head_link->setAttribute('href', $script_base . 'css/tiempos/tiempos.css');
-    $head->appendChild($head_link);
-    
-    $head_link = $dom->createElement('link');
-    $head_link->setAttribute('rel', 'stylesheet');
-    $head_link->setAttribute('media', 'print');
-    $head_link->setAttribute('href', $script_base . 'css/print.css');
-    $head->appendChild($head_link);
-        
-    if (file_exists($script_filepath . '/css/custom.css')){
-      $head_link->setAttribute('rel', 'stylesheet');
-      $head_link->setAttribute('media', 'all');
-      $head_link->setAttribute('href', $script_base . 'css/custom.css');
-      $head->appendChild($head_link);      
-    }
-                
+    addCSStoHead($dom, $head);
+      
     $head_base = $dom->createElement('base');
     $head_base->setAttribute('href', $html_base);
     $head->appendChild($head_base);
@@ -211,35 +210,12 @@
     $head_viewport->setAttribute('content', 'initial-scale=1, viewport-fit=cover');
     $head->appendChild($head_viewport);
     
-    $head_link = $dom->createElement('link');
-    $head_link->setAttribute('rel', 'stylesheet');
-    $head_link->setAttribute('media', 'all');
-    $head_link->setAttribute('href', $script_base . 'css/github.css');
-    $head->appendChild($head_link);
-    
-    $head_link = $dom->createElement('link');
-    $head_link->setAttribute('rel', 'stylesheet');
-    $head_link->setAttribute('media', 'all');
-    $head_link->setAttribute('href', $script_base . 'css/tiempos/tiempos.css');
-    $head->appendChild($head_link);
-    
-    $head_link = $dom->createElement('link');
-    $head_link->setAttribute('rel', 'stylesheet');
-    $head_link->setAttribute('media', 'print');
-    $head_link->setAttribute('href', $script_base . 'css/print.css');
-    $head->appendChild($head_link);
-            
-    if (file_exists($script_filepath . '/css/custom.css')){
-      $head_link->setAttribute('rel', 'stylesheet');
-      $head_link->setAttribute('media', 'all');
-      $head_link->setAttribute('href', $script_base . 'css/custom.css');
-      $head->appendChild($head_link);      
-    }
+    addCSStoHead($dom, $head);
     
     $head_base = $dom->createElement('base');
     $head_base->setAttribute('href', $html_base);
     $head->appendChild($head_base);
-          
+    
     $head_title = $dom->createElement('title', 'Available Markdown Files');
     $head->appendChild($head_title);
 
