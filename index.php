@@ -49,7 +49,7 @@
     
   }
   
-  function addCSStoHead($dom, $head) {
+  function addCSStoHead($dom, $head, $script_base) {
     try {
       $css_directory = new \RecursiveDirectoryIterator(__DIR__ . '/css/');
     } catch (Exception $error) {
@@ -64,7 +64,7 @@
           $head_link = $dom->createElement('link');
           $head_link->setAttribute('rel', 'stylesheet');
           $head_link->setAttribute('media', 'all');
-          $head_link->setAttribute('href', $css_path);
+          $head_link->setAttribute('href', $script_base . $css_path);
           $head->appendChild($head_link);      
         }
       }
@@ -104,22 +104,24 @@
   $script_uri = $_SERVER['SCRIPT_URI'];
   $script_uri = stripforwardslashes($script_uri);
   
+  // Set the base URL path of the script
+
   if (preg_match('/(.*\/)([^\/]*$)/i', $script_uri, $request_matches) && isset($request_matches[2]) && urldecode($request_matches[2]) === $markdown_name) {
     $script_base = $request_matches[1];
   } else {
     $script_base = $_SERVER['SCRIPT_URI'];
   }
-      
-  // Set Base Url in Head to URI
-    
-  $html_base = $_SERVER['REQUEST_URI'];
-
+  
   if (isset($markdown_query) && isset($markdown_file_infos[$markdown_name])) {
     
     // Load and convert Markdown
     
     $markdown_file_name = $markdown_file_infos[$markdown_name]->getFilename();
     $markdown_file_path = $markdown_file_infos[$markdown_name]->getPathname();
+    
+    // Set HTML base to path of the markdown file
+    
+    $html_base = preg_replace('/' . $markdown_file_name . '$/i', '', $markdown_file_path);
     
     $markdown = file_get_contents($markdown_file_path);
     $markdown_html = MarkdownExtra::defaultTransform($markdown);
@@ -161,7 +163,7 @@
     $head_viewport->setAttribute('content', 'initial-scale=1, viewport-fit=cover');
     $head->appendChild($head_viewport);
     
-    addCSStoHead($dom, $head);
+    addCSStoHead($dom, $head, $script_base);
       
     $head_base = $dom->createElement('base');
     $head_base->setAttribute('href', $html_base);
@@ -197,6 +199,10 @@
       
   } else {
     
+    // Set Base Url in Head to URI
+      
+    $html_base = $_SERVER['REQUEST_URI'];
+
     $dom = new DOMDocument('1.0', 'utf-8');
     
       // Compile new Head
@@ -210,7 +216,7 @@
     $head_viewport->setAttribute('content', 'initial-scale=1, viewport-fit=cover');
     $head->appendChild($head_viewport);
     
-    addCSStoHead($dom, $head);
+    addCSStoHead($dom, $head, $script_base);
     
     $head_base = $dom->createElement('base');
     $head_base->setAttribute('href', $html_base);
