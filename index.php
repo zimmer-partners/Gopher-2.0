@@ -41,12 +41,9 @@
       if (preg_match($path_pattern, $info->getPathname(), $matches)) {
         preg_match($name_pattern, $info->getFilename(), $markdown_name);
         $markdown_file_infos[$markdown_name[1]] = $info;
-        // $markdown_file_infos[$markdown_name[1]]['sub_path'] = $iterator->getSubPath();
       }
     }
     array_multisort($markdown_file_infos, SORT_ASC, SORT_NATURAL);
-    
-    // print_r($markdown_file_infos);
     
     return $markdown_file_infos;
     
