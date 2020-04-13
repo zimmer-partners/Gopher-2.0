@@ -38,7 +38,7 @@ If you decide to use Markdown Publisher, it would be kind of nice to mention Zim
 - 1.0: First release version
 - 1.1: Added dynamic loading of all CSS files
 - 1.2: Added custom HTML markup through `templates/full.html`
-- 1.3: Updated PHP Markdown to 1.9 and installed and introduced PHP SmartyPants 1.8.1
+- 1.3: Updated Markdown and introduced SmartyPants
   - Introduced SmartPants (see [Michel Fortin's documentation](https://github.com/michelf/php-smartypants))
   - Update: PHP Markdown to 1.9
   - Update: PHP SmartyPants 1.8.1
