@@ -1,7 +1,8 @@
 <?php
   
-  require '../vendor/autoload.php';
-  use Michelf\MarkdownExtra;
+  require './vendor/autoload.php';
+  
+  use Michelf\MarkdownExtra, Michelf\SmartyPants;
   
   function stripforwardslashes($string) {
     
@@ -125,6 +126,7 @@
     
     $markdown = file_get_contents($markdown_file_path);
     $markdown_html = MarkdownExtra::defaultTransform($markdown);
+    $markdown_html = SmartyPants::defaultTransform($markdown_html);
           
     // Parse HTML base
     
