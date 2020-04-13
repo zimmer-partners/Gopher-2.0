@@ -20,11 +20,22 @@ class ComposerStaticInitb30a3ad31c397dd56be81ef470304cd5
         ),
     );
 
+    public static $prefixesPsr0 = array (
+        'M' => 
+        array (
+            'Michelf' => 
+            array (
+                0 => __DIR__ . '/..' . '/michelf/php-smartypants',
+            ),
+        ),
+    );
+
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
             $loader->prefixLengthsPsr4 = ComposerStaticInitb30a3ad31c397dd56be81ef470304cd5::$prefixLengthsPsr4;
             $loader->prefixDirsPsr4 = ComposerStaticInitb30a3ad31c397dd56be81ef470304cd5::$prefixDirsPsr4;
+            $loader->prefixesPsr0 = ComposerStaticInitb30a3ad31c397dd56be81ef470304cd5::$prefixesPsr0;
 
         }, null, ClassLoader::class);
     }
