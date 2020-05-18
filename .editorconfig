@@ -1,0 +1,15 @@
+# EditorConfig is awesome: https://EditorConfig.org
+
+# Unix-style newlines with a newline ending every file
+[*]
+charset = utf-8
+indent_style = space
+indent_size = 2
+end_of_line = lf
+
+# 2 space indentation
+[*.php]
+trim_trailing_whitespace = true
+
+[*.{txt,md,mmd,markdown}]
+trim_trailing_whitespace = false
