@@ -42,4 +42,4 @@ If you decide to use Markdown Publisher, it would be kind of nice to mention Zim
   - For SmartPants[' documentation see](https://github.com/michelf/php-smartypants))
   - Updated PHP Markdown to 1.9
   - Fixed class autoloading
-
+- 1.3.1: Fixed scanning for markdown files containig periods in their name.
