@@ -50,7 +50,7 @@
 
   }
 
-  function addCSStoHead($dom, $head, $script_base) {
+  function addCSStoHead($dom, $head, $script_base, $debug = false) {
     try {
       $css_directory = new \RecursiveDirectoryIterator(__DIR__ . '/css/');
     } catch (Exception $error) {
@@ -61,7 +61,7 @@
       foreach ($css_iterator as $css_info) {
         if (preg_match('/^[^\.]+(\.css$)/', $css_info->getFilename())){
           $css_path = $css_info->getPathname();
-          $css_path = str_ireplace(__DIR__ . '/', '', $css_path);
+          $css_path = str_ireplace(__DIR__ . '/', '', ($css_path . ($debug ? ('?time=' . time()) : '')));
           $head_link = $dom->createElement('link');
           $head_link->setAttribute('rel', 'stylesheet');
           $head_link->setAttribute('media', 'all');
@@ -112,6 +112,10 @@
   } else {
     $script_base = $_SERVER['SCRIPT_URI'];
   }
+
+  // Set this ti true to force reloading CSS files on every refresh
+  
+  $debug = true;
 
   if (isset($markdown_query) && isset($markdown_file_infos[$markdown_name])) {
 
@@ -165,7 +169,7 @@
     $head_viewport->setAttribute('content', 'initial-scale=1, viewport-fit=cover');
     $head->appendChild($head_viewport);
 
-    addCSStoHead($dom, $head, $script_base);
+    addCSStoHead($dom, $head, $script_base, $debug);
 
     $head_base = $dom->createElement('base');
     $head_base->setAttribute('href', $html_base);
@@ -218,7 +222,7 @@
     $head_viewport->setAttribute('content', 'initial-scale=1, viewport-fit=cover');
     $head->appendChild($head_viewport);
 
-    addCSStoHead($dom, $head, $script_base);
+    addCSStoHead($dom, $head, $script_base, $debug);
 
     $head_base = $dom->createElement('base');
     $head_base->setAttribute('href', $html_base);
