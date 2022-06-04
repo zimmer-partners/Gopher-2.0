@@ -40,8 +40,8 @@
     $name_pattern = '/^(.+)(\.' .  implode($md_file_endings, '$|\.') . '$)/';
     foreach ($iterator as $info) {
       if (preg_match($path_pattern, $info->getPathname(), $matches)) {
-        preg_match($name_pattern, $info->getFilename(), $markdown_name);
-        $markdown_file_infos[$markdown_name[1]] = $info;
+        preg_match($name_pattern, $info->getFilename(), $markdown_names);
+        $markdown_file_infos[$markdown_names[1]] = $info;
       }
     }
     array_multisort($markdown_file_infos, SORT_ASC, SORT_NATURAL);
@@ -113,12 +113,20 @@
     $script_base = $_SERVER['SCRIPT_URI'];
   }
 
-  // Set this ti true to force reloading CSS files on every refresh
+  // Set this to true to force reloading CSS files on every refresh
   
-  $debug = true;
+  $debug = false;
 
-  if (isset($markdown_query) && isset($markdown_file_infos[$markdown_name])) {
-
+  if ((isset($markdown_query) && isset($markdown_file_infos[$markdown_name])) || count($markdown_file_infos) == 1) {
+    
+    // If there's only one file and no query, show the only file
+    
+    if (!isset($markdown_query) && count($markdown_file_infos) == 1) {
+      
+      $markdown_name = array_key_first($markdown_file_infos);
+      
+    }
+    
     // Load and convert Markdown
 
     $markdown_file_name = $markdown_file_infos[$markdown_name]->getFilename();
