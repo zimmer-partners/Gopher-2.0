@@ -17,7 +17,7 @@
 
   }
 
-  function findMarkdownFiles($path) {
+  function findMarkdownFiles($directory) {
 
     $md_file_endings = [
       0 => 'txt',
@@ -26,12 +26,6 @@
       3 => 'read',
       4 => 'write'
     ];
-
-    try {
-      $directory = new \RecursiveDirectoryIterator($path);
-    } catch (Exception $error) {
-      return false;
-    }
 
     $iterator = new \RecursiveIteratorIterator($directory);
 
@@ -74,10 +68,15 @@
 
   $script_filename = $_SERVER{'SCRIPT_FILENAME'};
   $script_filepath = preg_replace('/\/[^\.|^\/]*\.php$/i', '', $script_filename);
-
-  $markdown_base_directory = 'Quellen';
+  
   $markdown_query = isset($_GET['l']) ? $_GET['l'] : $_GET['q'];
-
+  
+  try {
+    $markdown_base_directory = new \RecursiveDirectoryIterator('Sources');
+  } catch (Exception $error) {
+    $markdown_base_directory = new \RecursiveDirectoryIterator('Quellen');
+  }
+  
   $markdown_file_infos = findMarkdownFiles($markdown_base_directory);
   $markdown_name = rawurldecode($markdown_query);
 
