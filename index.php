@@ -1,4 +1,13 @@
 <?php
+  
+  /* -------- *
+  ** Settings *
+  ** -------- */
+  
+  // Set this to true to force reloading CSS files on every refresh
+  $debug = false;
+  
+  /* Settings End */
 
   require './vendor/autoload.php';
 
@@ -17,7 +26,7 @@
 
   }
 
-  function findMarkdownFiles($path) {
+  function findMarkdownFiles($directory) {
 
     $md_file_endings = [
       0 => 'txt',
@@ -27,12 +36,6 @@
       4 => 'write'
     ];
 
-    try {
-      $directory = new \RecursiveDirectoryIterator($path);
-    } catch (Exception $error) {
-      return false;
-    }
-
     $iterator = new \RecursiveIteratorIterator($directory);
 
     $markdown_file_infos = array();
@@ -40,8 +43,8 @@
     $name_pattern = '/^(.+)(\.' .  implode($md_file_endings, '$|\.') . '$)/';
     foreach ($iterator as $info) {
       if (preg_match($path_pattern, $info->getPathname(), $matches)) {
-        preg_match($name_pattern, $info->getFilename(), $markdown_name);
-        $markdown_file_infos[$markdown_name[1]] = $info;
+        preg_match($name_pattern, $info->getFilename(), $markdown_names);
+        $markdown_file_infos[$markdown_names[1]] = $info;
       }
     }
     array_multisort($markdown_file_infos, SORT_ASC, SORT_NATURAL);
@@ -50,7 +53,7 @@
 
   }
 
-  function addCSStoHead($dom, $head, $script_base) {
+  function addCSStoHead($dom, $head, $script_base, $debug = false) {
     try {
       $css_directory = new \RecursiveDirectoryIterator(__DIR__ . '/css/');
     } catch (Exception $error) {
@@ -61,7 +64,7 @@
       foreach ($css_iterator as $css_info) {
         if (preg_match('/^[^\.]+(\.css$)/', $css_info->getFilename())){
           $css_path = $css_info->getPathname();
-          $css_path = str_ireplace(__DIR__ . '/', '', $css_path);
+          $css_path = str_ireplace(__DIR__ . '/', '', ($css_path . ($debug ? ('?time=' . time()) : '')));
           $head_link = $dom->createElement('link');
           $head_link->setAttribute('rel', 'stylesheet');
           $head_link->setAttribute('media', 'all');
@@ -74,10 +77,15 @@
 
   $script_filename = $_SERVER{'SCRIPT_FILENAME'};
   $script_filepath = preg_replace('/\/[^\.|^\/]*\.php$/i', '', $script_filename);
-
-  $markdown_base_directory = 'Quellen';
+  
   $markdown_query = isset($_GET['l']) ? $_GET['l'] : $_GET['q'];
-
+  
+  try {
+    $markdown_base_directory = new \RecursiveDirectoryIterator('Sources');
+  } catch (Exception $error) {
+    $markdown_base_directory = new \RecursiveDirectoryIterator('Quellen');
+  }
+  
   $markdown_file_infos = findMarkdownFiles($markdown_base_directory);
   $markdown_name = rawurldecode($markdown_query);
 
@@ -112,9 +120,17 @@
   } else {
     $script_base = $_SERVER['SCRIPT_URI'];
   }
-
-  if (isset($markdown_query) && isset($markdown_file_infos[$markdown_name])) {
-
+  
+  if ((isset($markdown_query) && isset($markdown_file_infos[$markdown_name])) || (!isset($markdown_query) && count($markdown_file_infos) == 1)) {
+    
+    // If there's only one file and no query, show the only file
+    
+    if (!isset($markdown_query) && count($markdown_file_infos) == 1) {
+      
+      $markdown_name = array_key_first($markdown_file_infos);
+      
+    }
+    
     // Load and convert Markdown
 
     $markdown_file_name = $markdown_file_infos[$markdown_name]->getFilename();
@@ -165,7 +181,7 @@
     $head_viewport->setAttribute('content', 'initial-scale=1, viewport-fit=cover');
     $head->appendChild($head_viewport);
 
-    addCSStoHead($dom, $head, $script_base);
+    addCSStoHead($dom, $head, $script_base, $debug);
 
     $head_base = $dom->createElement('base');
     $head_base->setAttribute('href', $html_base);
@@ -218,7 +234,7 @@
     $head_viewport->setAttribute('content', 'initial-scale=1, viewport-fit=cover');
     $head->appendChild($head_viewport);
 
-    addCSStoHead($dom, $head, $script_base);
+    addCSStoHead($dom, $head, $script_base, $debug);
 
     $head_base = $dom->createElement('base');
     $head_base->setAttribute('href', $html_base);

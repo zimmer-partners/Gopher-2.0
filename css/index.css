@@ -1,0 +1,22 @@
+.markdown-body footer {
+	font-size: 0.75rem;
+	padding: 1rem 0;
+}
+
+.markdown-body footer {
+	color: transparent; 
+}
+
+.markdown-body footer:hover {
+	color: lightgray;
+}
+
+.markdown-body footer a {
+	visibility: hidden; 
+	color: lightgray;
+	text-decoration: underline;
+}
+
+.markdown-body footer:hover * {
+	visibility: visible;
+}
