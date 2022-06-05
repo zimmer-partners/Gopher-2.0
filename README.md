@@ -1,18 +1,20 @@
 # Markdown-Publisher
 
-This PHP script searches a source subdirectory containing raw Markdown files and renders a match as a printable webpage. The directory scanned recessively for Markdown files is called Quellen, any references to images and other embeded media files can be bundled in subfolders with the referring Markdown file; relative paths to the media files are resolved correctly.
+This PHP script searches two source subdirectories containing raw Markdown files and renders a match as a printable webpage. There's the directory Quellen with demo files and a non-existent Sources directory scanned for Markdown files. Any references to images and other embedded media files can be bundled in subfolders with the referring Markdown file; relative paths to the media files are resolved correctly.
 
 ## How to install
 
 - Download or clone Markdown Publisher to your web server.
-- Replace the 'Quellen' directory with a directory or a directory tree holding your markdown files and images.
+- Check' if your installation shows the sample files from Quellen.
+- Delete the 'Quellen' directory with all its markdown files and images.
+- Create a 'Sources' directory for hosting your own markdown files and images. (You can have a look at [Quellen](https://github.com/zimmer-partners/Markdown-Publisher/tree/master/Quellen) to check out how to bundle markdown files and images and how to embed them in your texts.)
 - Point your browser to your web server.
 
 ### Styling and Templating
 
 Markdown Publisher comes with a set of CSS files, that can be changed. You can even add new CSS files to the CSS directory and they will get included to all Markdown based webpages automatically.
 
-To add custom HTML markup to your Markdown based webpages, you can add any custom valid HTML tags to the file `full.html`. Any valid tags in its `head` or `body` HTML tags is added to the *end* of the correspodning section of all Markdown based webpages. (Good to include tracking for Matamo, Google analytics et al.)
+To add custom HTML markup to your Markdown based webpages, you can add any custom valid HTML tags to the file `full.html`. Any valid tags in its `head` or `body` HTML tags is added to the *end* of the corresponding section of all Markdown based webpages. (Good to include tracking for Matamo, Google analytics et al.)
 
 ### Running from a subdirectory on your server
 
@@ -29,9 +31,9 @@ If you decide to use Markdown Publisher anyhow, Moritz Zimmer does not account f
 
 ## Copyleft
 
-Feel free to change any part of Markdown Publisher, especially replacing the font specified in its CSS files so you don't get any issues. 
+Feel free to change any part of Markdown Publisher and distribute your work, *except the Tiempos font*. Please use your own css skills to adapt its look to a font of your choice by changing the existing css files. Note that any css files stored at `css/custom/` is automatically add to your Markdown Publisher website. This makes it super easy to add any CSS rules extending or overwriting built in rules.
 
-If you decide to use Markdown Publisher, it would be kind of nice to mention Zimmer & Partner – at least in Markdown Publisher's source code or any work derived from it.
+If you decide to use Markdown Publisher, it would be kind of nice to mention [Zimmer & Partner](https://zimmer.partners) – at least in Markdown Publisher's source code or any work derived from it.
 
 ## Version history
 
@@ -42,4 +44,7 @@ If you decide to use Markdown Publisher, it would be kind of nice to mention Zim
   - For SmartPants[' documentation see](https://github.com/michelf/php-smartypants))
   - Updated PHP Markdown to 1.9
   - Fixed class autoloading
-- 1.3.1: Fixed scanning for markdown files containig periods in their name.
+- 1.3.1: Fixed scanning for markdown files containing periods in their name.
+- 1.4: Several Teaks and feature set extensions
+  - Added capability to scan 'Sources' as the main markdown files directory.
+  - Added footer with credits to the HTML template and corresponding css rules.

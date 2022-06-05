@@ -1,4 +1,13 @@
 <?php
+  
+  /* -------- *
+  ** Settings *
+  ** -------- */
+  
+  // Set this to true to force reloading CSS files on every refresh
+  $debug = false;
+  
+  /* Settings End */
 
   require './vendor/autoload.php';
 
@@ -111,11 +120,7 @@
   } else {
     $script_base = $_SERVER['SCRIPT_URI'];
   }
-
-  // Set this to true to force reloading CSS files on every refresh
   
-  $debug = false;
-
   if ((isset($markdown_query) && isset($markdown_file_infos[$markdown_name])) || (!isset($markdown_query) && count($markdown_file_infos) == 1)) {
     
     // If there's only one file and no query, show the only file
