@@ -1,13 +1,6 @@
 <?php
-  
-  /* -------- *
-  ** Settings *
-  ** -------- */
-  
-  // Set this to true to force reloading CSS files on every refresh
-  $debug = false;
-  
-  /* Settings End */
+
+  require('./gopher/config.php')
 
   require './vendor/autoload.php';
 
@@ -77,15 +70,15 @@
 
   $script_filename = $_SERVER{'SCRIPT_FILENAME'};
   $script_filepath = preg_replace('/\/[^\.|^\/]*\.php$/i', '', $script_filename);
-  
+
   $markdown_query = isset($_GET['l']) ? $_GET['l'] : $_GET['q'];
-  
+
   try {
     $markdown_base_directory = new \RecursiveDirectoryIterator('Sources');
   } catch (Exception $error) {
     $markdown_base_directory = new \RecursiveDirectoryIterator('Quellen');
   }
-  
+
   $markdown_file_infos = findMarkdownFiles($markdown_base_directory);
   $markdown_name = rawurldecode($markdown_query);
 
@@ -120,17 +113,17 @@
   } else {
     $script_base = $_SERVER['SCRIPT_URI'];
   }
-  
+
   if ((isset($markdown_query) && isset($markdown_file_infos[$markdown_name])) || (!isset($markdown_query) && count($markdown_file_infos) == 1)) {
-    
+
     // If there's only one file and no query, show the only file
-    
+
     if (!isset($markdown_query) && count($markdown_file_infos) == 1) {
-      
+
       $markdown_name = array_key_first($markdown_file_infos);
-      
+
     }
-    
+
     // Load and convert Markdown
 
     $markdown_file_name = $markdown_file_infos[$markdown_name]->getFilename();
