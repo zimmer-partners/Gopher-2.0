@@ -1,6 +1,6 @@
-# Markdown-Publisher
+# Gopher 2.0
 
-This PHP script searches two source subdirectories containing raw Markdown files and renders a match as a printable webpage. There's the directory Quellen with demo files and a non-existent Sources directory scanned for Markdown files. Any references to images and other embedded media files can be bundled in subfolders with the referring Markdown file; relative paths to the media files are resolved correctly.
+This PHP server application scans two source subdirectories containing raw Markdown files and renders a match as a printable webpage. There's the directory Quellen with demo files and a non-existent Sources directory scanned for Markdown files. Any references to images and other embedded media files can be bundled in subfolders with the referring Markdown file; relative paths to the media files are resolved correctly.
 
 ## How to install
 
@@ -20,8 +20,8 @@ To add custom HTML markup to your Markdown based webpages, you can add any custo
 
 Markdown Publisher comes with a pre-configured `.htacsess` file for clean-URLs. If you run its script from a subdirectory of you server, please add its name to the following line:
 
-Change... `RewriteRule .*      /?q=%1                     [L]`
-... to: `RewriteRule .*      /mydirectory/?q=%1                     [L]`
+Change... `RewriteRule .* /?q=%1 [L]`
+... to: `RewriteRule .* /mydirectory/?q=%1 [L]`
 
 ## Why ist this not open source?
 
